@@ -2,4 +2,17 @@ extends layout
 
 block contenido
     .contenido-principal
-        h1= nombrePagina
+        h1 #{nombrePagina} - #{proyecto.nombre}
+
+        // TODO - Formulario aqui
+
+
+        //TODO - Listado de Pendietes
+
+        //Acciones que se pueden realizar 
+        //- pre= vardump(proyecto)
+
+        .contenedor-acciones 
+            a(href= `/proyectos/editar/${proyecto.id}` class="boton") Editar Proyecto
+            button#eliminar-proyecto(data-proyecto-url=proyecto.url type="button" class="boton eliminar") Eliminar Proyecto
+            //data-proyecto-url=proyecto.url es para crear una variable y usarla en otro lugar

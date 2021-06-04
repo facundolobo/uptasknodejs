@@ -13,13 +13,19 @@ module.exports = function (){ //funcion apra exportar
     router.get('/nuevo-proyecto', proyectosController.formularioProyecto);
     router.post('/nuevo-proyecto', 
         body('nombre').not().isEmpty().trim().escape(), //restricciones que agregamos para depurar 
-        proyectosController.nuevoProyecto
-
-    );
+        proyectosController.nuevoProyecto);
 
     //Listar proyecto
     router.get('/proyectos/:url', proyectosController.proyectoPorUrl);
+    
+    //Actualizar el proyecto
+    router.get('/proyectos/editar/:id',proyectosController.formualrioEditar);
+    router.post('/nuevo-proyecto/:id', 
+        body('nombre').not().isEmpty().trim().escape(), //restricciones que agregamos para depurar 
+        proyectosController.actualizarProyecto);
 
+    // Eliminar proyecto
+    router.delete('/proyectos/:url', proyectosController.eliminarProyecto);
     return router;
 }
 
