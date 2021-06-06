@@ -1,5 +1,6 @@
 const Proyectos = require('../models/Proyectos');
-const slug = require('slug')
+const Tareas = require('../models/Tareas') //importamos als tareas
+
 
 exports.proyectosHome = async (req, res)=>{ //request , responce  / es async porque es una promesa por la consulta a la base de datos
     const proyectos = await Proyectos.findAll(); //obtener todos los registros del modelo (es como Select * From) se conecta al modelo
@@ -51,21 +52,25 @@ exports.nuevoProyecto = async(req, res)=>{
 exports.proyectoPorUrl = async(req, res) =>{
     
 
-    const proyectos = await Proyectos.findAll(); //obtener todos los registros del modelo (es como Select * From) se conecta al modelo
-    const proyecto = await Proyectos.findOne({
+    const proyectosPromise = Proyectos.findAll(); //es para mostrar los proyectos a la izquierda en el sidebar
+
+    const proyectoPromise = Proyectos.findOne({ //es para buscar el proyecto en el cual estoy trabajando
         where:{
-            url: req.params.url
-        }
+            url: req.params.url //el id q enviamos el router ":id"
+        } 
     });
+    const [proyectos, proyecto] = await Promise.all([proyectosPromise, proyectoPromise]);
 
-    // const proyectosPromise = Proyectos.findAll(); //es para mostrar los proyectos a la izquierda en el sidebar
+    //Consultar tareas de Proyecto actual
+    const tareas = await Tareas.findAll({
+        where: {
+            proyectoId : proyecto.id 
+        }, 
+        // include: [ //para hacer como un "JOIN" 
+        //     {model: Proyectos}
+        // ]
+    })
 
-    // const proyectoPromise = Proyectos.findOne({ //es para buscar el proyecto en el cual estoy trabajando
-    //     where:{
-    //         url: req.params.url 
-    //     } 
-    // });
-    // const [proyectos, proyecto] = await Promise.all([proyectosPromise, proyectoPromise]);
 
 
 
@@ -75,7 +80,8 @@ exports.proyectoPorUrl = async(req, res) =>{
     res.render('tareas', {
         nombrePagina : 'Tareas del Proyecto',
         proyecto,
-        proyectos
+        proyectos,
+        tareas //enviamos las tareas a la vista
     })
 }
 

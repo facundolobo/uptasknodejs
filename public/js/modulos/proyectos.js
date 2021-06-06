@@ -20,12 +20,12 @@ if (btnEliminar){ //agregamos este if para cuando el boton eliminar existe
           }).then((result) => {
             if (result.isConfirmed) {
 
-              //enviar peticion a axios  
+              //enviar petición a axios  
               const url = `${location.origin}/proyectos/${urlProyecto}`;
               
               axios.delete(url, {params: {urlProyecto}})
                 .then(function(respuesta){
-                    console.log(respuesta)
+                    //console.log(respuesta)
                    
                     Swal.fire(
                       'Proyecto Eliminado',
@@ -40,7 +40,7 @@ if (btnEliminar){ //agregamos este if para cuando el boton eliminar existe
               
               .catch(()=>{
                 Swal.fire({
-                  
+                   
                   type: 'error',
                   title: 'Hubo un error',
                   text: 'No se pudo eliminar el Proyecto'

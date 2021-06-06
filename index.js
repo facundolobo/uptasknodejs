@@ -35,6 +35,8 @@ const db = require('./config/db');
 
 //Importar el modelo
 require('./models/Proyectos');
+require('./models/Tareas');
+
 
 db.sync() //sequelize es un ORM basado en Promesas
     .then(()=> console.log('Conectado al servidor'))

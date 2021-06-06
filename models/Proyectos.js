@@ -4,14 +4,14 @@ const slug = require('slug');
 const shortid = require('shortid');
 
 //definimos la estructura de datos
-const Proyetos = db.define('Proyectos',{
+const Proyetos = db.define('proyectos',{
     id : {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    nombre: Sequelize.STRING,
-    url: Sequelize.STRING 
+    nombre: Sequelize.STRING(100),
+    url: Sequelize.STRING(100) 
 }, {
     hooks: { 
         beforeCreate(proyecto){
