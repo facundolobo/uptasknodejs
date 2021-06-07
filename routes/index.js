@@ -30,8 +30,14 @@ module.exports = function (){ //funcion apra exportar
     router.delete('/proyectos/:url', proyectosController.eliminarProyecto);
 
     //Tareas
-    router.post('/proyectos/:url', tareasController.agregarTarea)
+    router.post('/proyectos/:url', tareasController.agregarTarea);
 
+    //Actualizar tarea
+    router.patch('/tareas/:id', tareasController.cambiarEstadoTarea); //patch es para actualizar una aprte del objeto, put es para actualizar todo el objeto 
+
+    //Eliminar tarea
+    router.delete('/tareas/:id', tareasController.eliminarTarea); 
+    
     return router;
 }
 
