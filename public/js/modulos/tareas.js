@@ -1,6 +1,8 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 
+import {actualiarAvance} from '../funciones/avance';
+
 const tareas = document.querySelector('.listado-pendientes');
 
 if(tareas){ //funcion para saber en q lugar hiciste click, devolvera la clase
@@ -16,6 +18,7 @@ if(tareas){ //funcion para saber en q lugar hiciste click, devolvera la clase
                 .then(function(respuesta){
                     if (respuesta.status === 200){
                         icono.classList.toggle('completo')//se para cambiar de color el icono
+                        actualiarAvance(); //para que se actualize el avence
                     }
                 })
         }
@@ -49,6 +52,7 @@ if(tareas){ //funcion para saber en q lugar hiciste click, devolvera la clase
                                         respuesta.data,
                                         'success'
                                     )
+                                    actualiarAvance(); //para que se actualize el avence
                                 }
                             })
                     }
