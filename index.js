@@ -6,7 +6,9 @@ const flash = require('connect-flash');
 //const expressValidator = require('express-validator')
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-
+const passport = require('./config/passport');
+//EXTRAER VALORES DE VARIABLES
+require('dotenv').config({path: 'variables.env'})
 //hepers con algunas funciones
 const helpers = require('./helpers');
 
@@ -35,15 +37,21 @@ app.use(cookieParser());
 
 //sessiones nos permiten navegar entre distintas paginas sin volvernos a autenticar
 app.use(session({
-    secret: 'supersecreto',
+    secret: 'keyboard cat',
     resave: false,
     saveUninitialized: false
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 //Pasar vardump a la app
 app.use((req, res, next)=>{
+    
     res.locals.vardump = helpers.vardump; //crear una nueva variable para ser utlizada en cualquier lugar de la app
     res.locals.mensajes = req.flash();
+    res.locals.usuario = {...req.user} || null;
+    console.log(res.locals.usuario);
     next();
 })
 
@@ -67,3 +75,12 @@ app.use('/', router()); //utilizamos la funcion router() y usara ese index
 app.listen(3000); //para decir en que puerto correr
 
 
+
+
+//servidor y puerto
+const host= process.env.HOST || '0.0.0.0';
+const port= process.env.PORT || 3000;
+
+app.listen(port, host, ()=>{
+    console.log('El servidor esta funcionando');
+})

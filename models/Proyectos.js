@@ -4,7 +4,7 @@ const slug = require('slug');
 const shortid = require('shortid');
 
 //definimos la estructura de datos
-const Proyetos = db.define('proyectos',{
+const Proyectos = db.define('proyectos',{
     id : {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -26,4 +26,4 @@ const Proyetos = db.define('proyectos',{
 
 //exportamos la estructura
 
-module.exports = Proyetos;
+module.exports = Proyectos;

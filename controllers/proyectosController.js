@@ -3,7 +3,12 @@ const Tareas = require('../models/Tareas') //importamos als tareas
 
 
 exports.proyectosHome = async (req, res)=>{ //request , responce  / es async porque es una promesa por la consulta a la base de datos
-    const proyectos = await Proyectos.findAll(); //obtener todos los registros del modelo (es como Select * From) se conecta al modelo
+    
+    // console.log(res.locals.usuario);
+
+    const usuarioId = res.locals.usuario.id;
+
+    const proyectos = await Proyectos.findAll({where : { usuarioId}}); //obtener todos los registros del modelo (es como Select * From) se conecta al modelo
     res.render('index', {
         nombrePagina : 'Proyectos',
         proyectos //enviamos los proyectos obtenidos a la vista
@@ -11,7 +16,10 @@ exports.proyectosHome = async (req, res)=>{ //request , responce  / es async por
 }
 
 exports.formularioProyecto = async(req, res)=>{
-    const proyectos = await Proyectos.findAll();
+
+    const usuarioId = res.locals.usuario.id;
+
+    const proyectos = await Proyectos.findAll({where : { usuarioId}});
     res.render('nuevoProyecto',{
         nombrePagina : 'Nuevo Proyecto',
         proyectos
@@ -20,7 +28,9 @@ exports.formularioProyecto = async(req, res)=>{
 }
 
 exports.nuevoProyecto = async(req, res)=>{
-    const proyectos = await Proyectos.findAll();
+    const usuarioId = res.locals.usuario.id;
+
+    const proyectos = await Proyectos.findAll({where : { usuarioId}});
     //enviar a la consola lo que el usuario escribio
     //console.log(req.body) 
 
@@ -43,20 +53,23 @@ exports.nuevoProyecto = async(req, res)=>{
     }else {
         //No hay errores
         // Insertar en la BD
-        
-        await Proyectos.create({ nombre });
+        const usuarioId = res.locals.usuario.id;
+
+        await Proyectos.create({ nombre , usuarioId});
         res.redirect('/'); //despeus de ingresar los datos lo llevara a home     
     }
 }
 
 exports.proyectoPorUrl = async(req, res) =>{
     
+    const usuarioId = res.locals.usuario.id;
 
-    const proyectosPromise = Proyectos.findAll(); //es para mostrar los proyectos a la izquierda en el sidebar
+    const proyectosPromise =  Proyectos.findAll({where : { usuarioId}});
 
     const proyectoPromise = Proyectos.findOne({ //es para buscar el proyecto en el cual estoy trabajando
         where:{
-            url: req.params.url //el id q enviamos el router ":id"
+            url: req.params.url, //el id q enviamos el router ":id"
+            usuarioId
         } 
     });
     const [proyectos, proyecto] = await Promise.all([proyectosPromise, proyectoPromise]);
@@ -87,11 +100,14 @@ exports.proyectoPorUrl = async(req, res) =>{
 
 exports.formualrioEditar= async(req, res) =>{
 
-    const proyectosPromise = Proyectos.findAll(); //es para mostrar los proyectos a la izquierda en el sidebar
+    const usuarioId = res.locals.usuario.id;
+
+    const proyectosPromise = Proyectos.findAll({where : { usuarioId}});
 
     const proyectoPromise = Proyectos.findOne({ //es para buscar el proyecto en el cual estoy trabajando
         where:{
-            id: req.params.id //el id q enviamos el router ":id"
+            id: req.params.id, //el id q enviamos el router ":id"
+            usuarioId
         } 
     });
     const [proyectos, proyecto] = await Promise.all([proyectosPromise, proyectoPromise]);
@@ -107,7 +123,9 @@ exports.formualrioEditar= async(req, res) =>{
 
 
 exports.actualizarProyecto = async(req, res)=>{
-    const proyectos = await Proyectos.findAll();
+    const usuarioId = res.locals.usuario.id;
+
+    const proyectos = await Proyectos.findAll({where : { usuarioId}});
     //enviar a la consola lo que el usuario escribio
     //console.log(req.body) 
 
@@ -130,6 +148,7 @@ exports.actualizarProyecto = async(req, res)=>{
     }else {
         //No hay errores
         // Insertar en la BD
+        
         
         await Proyectos.update(
             { nombre: nombre },
